@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import ClassContextComponent from './ClassContextComponent'
+import FunctionContextComponent from './FunctionContextComponent'
+
+export const ThemeContext = React.createContext<any>(null)
+const myObject = {
+  name: 'asdf',
+  myMethod() {
+    const callback = () => {
+      console.log(this) // logs myObject
+    }
+    callback()
+  },
+}
+function outerFunc() {
+  const test = () => {}
+  test()
+}
+myObject.myMethod()
 
 function App() {
+  const [darkTheme, setDarkTheme] = useState(true)
+  const toggleTheme = () => {
+    setDarkTheme((prevDarkTheme) => !prevDarkTheme)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <ThemeContext.Provider value={darkTheme}>
+        <button onClick={toggleTheme}>Toggle Theme</button>
+        <ClassContextComponent />
+        <FunctionContextComponent />
+      </ThemeContext.Provider>
+    </>
+  )
 }
 
-export default App;
+export default App
